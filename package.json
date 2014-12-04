@@ -1,0 +1,15 @@
+{
+  "name": "interes_compuesto",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "main": "interes_compuesto.coffee",
+  "scripts": {
+    "start": "coffee ./interes_compuesto.coffee"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "numeral": "^1.5.3"
+  }
+}
