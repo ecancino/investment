@@ -1,0 +1,89 @@
+#!/usr/bin/env coffee
+
+prompt = require 'prompt'
+optimist = require 'optimist'
+numeral = require 'numeral'
+
+prompt.override = optimist.argv
+
+schema =
+  properties:
+    capital:
+      description: 'Financial capital'
+      message: 'Must be a number'
+      type: 'number'
+      default: 0
+      required: true
+    rate:
+      description: 'Compound annual growth rate'
+      message: 'Must be a number between 10 & 100'
+      minimum: 10
+      maximum: 100
+      type: 'number'
+      default: 10
+      required: true
+    amount:
+      description: 'Monthly investment'
+      message: 'Must be a number'
+      type: 'number'
+      required: true
+    years:
+      description: 'Years of investment'
+      message: 'Must be a number'
+      type: 'number'
+      default: 10
+      required: true
+    inflation:
+      message: 'Inflation'
+      default: 0
+
+prompt.start()
+
+prompt.get schema, (err, result) ->
+  total = investment(result.capital, result.rate, result.amount, result.years, result.inflation)
+  console.log numeral(total).format '$ 0,0[.]00'
+
+investment = ( capital, rate, amount, years, inflation ) ->
+  return null if not rate or not (capital + amount) or not years
+
+  saldo = (capital * 1.0)
+  ahorro = (amount * 1.0)
+  inflacion = (inflation * 1.0) / 12
+  tasa = ((rate * 1.0) / 12) - inflacion
+  meses = (years * 12)
+  mes = i = 1
+
+  while i <= meses
+    interes = Math.round((saldo * tasa / 100) * 100) / 100
+    saldo = saldo + interes + ahorro
+
+    mes += 1
+    if mes > 12
+      mes = 1
+      ahorro = ahorro * (1 + inflacion * 12 / 100)
+      ahorro = Math.round(ahorro * 100) / 100
+    i += 1
+
+  Math.round saldo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
